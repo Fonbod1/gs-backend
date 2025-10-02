@@ -1,0 +1,92 @@
+package com.k48.managing.stock.service.impl;
+
+import com.k48.managing.stock.dto.MvtStkDto;
+import com.k48.managing.stock.exceptions.ErrorCodes;
+import com.k48.managing.stock.exceptions.InvalidEntityException;
+import com.k48.managing.stock.model.TypeMvtStk;
+import com.k48.managing.stock.repository.MvtStkRepository;
+import com.k48.managing.stock.service.ArticleService;
+import com.k48.managing.stock.service.MvtStkService;
+import com.k48.managing.stock.validators.MvtStkValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class MvtStkServiceImpl implements MvtStkService {
+
+    private static final Logger log = LoggerFactory.getLogger(MvtStkServiceImpl.class);
+
+    private MvtStkRepository repository;
+    private ArticleService articleService;
+
+    @Autowired
+    public MvtStkServiceImpl(MvtStkRepository repository, ArticleService articleService) {
+        this.repository = repository;
+        this.articleService = articleService;
+    }
+
+    @Override
+    public BigDecimal stockReelArticle(Integer idArticle) {
+        if (idArticle == null) {
+            log.warn("ID article is NULL");
+            return BigDecimal.valueOf(-1);
+        }
+        articleService.findById(idArticle);
+        return repository.stockReelArticle(idArticle);
+    }
+
+    @Override
+    public List<MvtStkDto> mvtStkArticle(Integer idArticle) {
+        return repository.findAllByArticleId(idArticle).stream()
+                .map(MvtStkDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public MvtStkDto entreeStock(MvtStkDto dto) {
+        return entreePositive(dto, TypeMvtStk.ENTREE);
+    }
+
+    @Override
+    public MvtStkDto sortieStock(MvtStkDto dto) {
+        return sortieNegative(dto, TypeMvtStk.SORTIE);
+    }
+
+    @Override
+    public MvtStkDto correctionStockPos(MvtStkDto dto) {
+        return entreePositive(dto, TypeMvtStk.CORRECTION_POS);
+    }
+
+    @Override
+    public MvtStkDto correctionStockNeg(MvtStkDto dto) {
+        return sortieNegative(dto, TypeMvtStk.CORRECTION_NEG);
+    }
+
+    private MvtStkDto entreePositive(MvtStkDto dto, TypeMvtStk typeMvtStk) {
+        List<String> errors = MvtStkValidator.validate(dto);
+        if (!errors.isEmpty()) {
+            log.error("Article is not valid {}", dto);
+            throw new InvalidEntityException("Le mouvement du stock n'est pas valide", ErrorCodes.MVT_STK_NOT_VALID, errors);
+        }
+        dto.setQuantite(BigDecimal.valueOf(Math.abs(dto.getQuantite().doubleValue())));
+        dto.setTypeMvt(typeMvtStk);
+        return MvtStkDto.fromEntity(repository.save(MvtStkDto.toEntity(dto)));
+    }
+
+    private MvtStkDto sortieNegative(MvtStkDto dto, TypeMvtStk typeMvtStk) {
+        List<String> errors = MvtStkValidator.validate(dto);
+        if (!errors.isEmpty()) {
+            log.error("Article is not valid {}", dto);
+            throw new InvalidEntityException("Le mouvement du stock n'est pas valide", ErrorCodes.MVT_STK_NOT_VALID, errors);
+        }
+        dto.setQuantite(BigDecimal.valueOf(Math.abs(dto.getQuantite().doubleValue()) * -1));
+        dto.setTypeMvt(typeMvtStk);
+        return MvtStkDto.fromEntity(repository.save(MvtStkDto.toEntity(dto)));
+    }
+}

@@ -1,0 +1,73 @@
+package com.k48.managing.stock.handlers;
+
+import com.k48.managing.stock.exceptions.EntityNotFoundException;
+import com.k48.managing.stock.exceptions.ErrorCodes;
+import com.k48.managing.stock.exceptions.InvalidEntityException;
+import com.k48.managing.stock.exceptions.InvalidOperationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.Collections;
+
+@RestControllerAdvice
+public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleException(EntityNotFoundException exception, WebRequest webRequest) {
+
+        final HttpStatus notFound = HttpStatus.NOT_FOUND;
+        final ErrorDto errorDto = new ErrorDto.Builder()
+                .code(exception.getErrorCode())  // Access errorCode from EntityNotFoundException
+                .httpCode(notFound.value())
+                .message(exception.getMessage())  // Access message from exception
+                .build();
+
+        return new ResponseEntity<>(errorDto, notFound);
+    }
+
+    @ExceptionHandler(InvalidOperationException.class)
+    public ResponseEntity<ErrorDto> handleException(InvalidOperationException exception, WebRequest webRequest) {
+
+        final HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        final ErrorDto errorDto = new ErrorDto.Builder()
+                .code(exception.getErrorCode())  // Access errorCode from InvalidOperationException
+                .httpCode(badRequest.value())
+                .message(exception.getMessage())  // Access message from exception
+                .build();
+
+        return new ResponseEntity<>(errorDto, badRequest);
+    }
+
+    @ExceptionHandler(InvalidEntityException.class)
+    public ResponseEntity<ErrorDto> handleException(InvalidEntityException exception, WebRequest webRequest) {
+
+        final HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        final ErrorDto errorDto = new ErrorDto.Builder()
+                .code(exception.getErrorCode())  // Access errorCode from InvalidEntityException
+                .httpCode(badRequest.value())
+                .message(exception.getMessage())  // Access message from exception
+                .errors(exception.getErrors())  // Access errors from InvalidEntityException
+                .build();
+
+        return new ResponseEntity<>(errorDto, badRequest);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorDto> handleException(BadCredentialsException exception, WebRequest webRequest) {
+
+        final HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        final ErrorDto errorDto = new ErrorDto.Builder()
+                .code(ErrorCodes.BAD_CREDENTIALS)  // Using predefined errorCode from ErrorCodes
+                .httpCode(badRequest.value())
+                .message(exception.getMessage())  // Access message from exception
+                .errors(Collections.singletonList("Login et / ou mot de passe incorrecte"))  // Specific error message
+                .build();
+
+        return new ResponseEntity<>(errorDto, badRequest);
+    }
+}
