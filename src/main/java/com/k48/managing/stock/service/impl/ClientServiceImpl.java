@@ -1,4 +1,6 @@
 package com.k48.managing.stock.service.impl;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.k48.managing.stock.dto.ClientDto;
 import com.k48.managing.stock.exceptions.EntityNotFoundException;
@@ -10,18 +12,13 @@ import com.k48.managing.stock.repository.ClientRepository;
 import com.k48.managing.stock.repository.CommandeClientRepository;
 import com.k48.managing.stock.service.ClientService;
 import com.k48.managing.stock.validators.ClientValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
+@Slf4j
 public class ClientServiceImpl implements ClientService {
-
-    private static final Logger log = LoggerFactory.getLogger(ClientServiceImpl.class);
 
     private ClientRepository clientRepository;
     private CommandeClientRepository commandeClientRepository;

@@ -19,12 +19,11 @@ public interface ArticleService {
 
     List<LigneVenteDto> findHistoriqueVentes(Integer idArticle);
 
-    List<LigneCommandeClientDto> findHistoriaueCommandeClient(Integer idArticle);
+    List<LigneCommandeClientDto> findHistoriqueCommandeClient(Integer idArticle);
 
     List<LigneCommandeFournisseurDto> findHistoriqueCommandeFournisseur(Integer idArticle);
 
     List<ArticleDto> findAllArticleByIdCategory(Integer idCategory);
 
     void delete(Integer id);
-
 }

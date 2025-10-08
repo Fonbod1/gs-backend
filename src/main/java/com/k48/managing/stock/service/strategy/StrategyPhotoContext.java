@@ -1,14 +1,13 @@
 package com.k48.managing.stock.service.strategy;
-
 import com.flickr4java.flickr.FlickrException;
+import java.io.InputStream;
+
 import com.k48.managing.stock.exceptions.ErrorCodes;
 import com.k48.managing.stock.exceptions.InvalidOperationException;
 import lombok.Setter;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.InputStream;
 
 @Service
 public class StrategyPhotoContext {

@@ -1,4 +1,7 @@
 package com.k48.managing.stock.service.impl;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.k48.managing.stock.dto.MvtStkDto;
 import com.k48.managing.stock.exceptions.ErrorCodes;
@@ -8,19 +11,13 @@ import com.k48.managing.stock.repository.MvtStkRepository;
 import com.k48.managing.stock.service.ArticleService;
 import com.k48.managing.stock.service.MvtStkService;
 import com.k48.managing.stock.validators.MvtStkValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
+@Slf4j
 public class MvtStkServiceImpl implements MvtStkService {
-
-    private static final Logger log = LoggerFactory.getLogger(MvtStkServiceImpl.class);
 
     private MvtStkRepository repository;
     private ArticleService articleService;
@@ -74,9 +71,15 @@ public class MvtStkServiceImpl implements MvtStkService {
             log.error("Article is not valid {}", dto);
             throw new InvalidEntityException("Le mouvement du stock n'est pas valide", ErrorCodes.MVT_STK_NOT_VALID, errors);
         }
-        dto.setQuantite(BigDecimal.valueOf(Math.abs(dto.getQuantite().doubleValue())));
+        dto.setQuantite(
+                BigDecimal.valueOf(
+                        Math.abs(dto.getQuantite().doubleValue())
+                )
+        );
         dto.setTypeMvt(typeMvtStk);
-        return MvtStkDto.fromEntity(repository.save(MvtStkDto.toEntity(dto)));
+        return MvtStkDto.fromEntity(
+                repository.save(MvtStkDto.toEntity(dto))
+        );
     }
 
     private MvtStkDto sortieNegative(MvtStkDto dto, TypeMvtStk typeMvtStk) {
@@ -85,8 +88,14 @@ public class MvtStkServiceImpl implements MvtStkService {
             log.error("Article is not valid {}", dto);
             throw new InvalidEntityException("Le mouvement du stock n'est pas valide", ErrorCodes.MVT_STK_NOT_VALID, errors);
         }
-        dto.setQuantite(BigDecimal.valueOf(Math.abs(dto.getQuantite().doubleValue()) * -1));
+        dto.setQuantite(
+                BigDecimal.valueOf(
+                        Math.abs(dto.getQuantite().doubleValue()) * -1
+                )
+        );
         dto.setTypeMvt(typeMvtStk);
-        return MvtStkDto.fromEntity(repository.save(MvtStkDto.toEntity(dto)));
+        return MvtStkDto.fromEntity(
+                repository.save(MvtStkDto.toEntity(dto))
+        );
     }
 }

@@ -1,4 +1,8 @@
 package com.k48.managing.stock.service.impl;
+import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 
 import com.k48.managing.stock.dto.EntrepriseDto;
 import com.k48.managing.stock.dto.RolesDto;
@@ -11,20 +15,15 @@ import com.k48.managing.stock.repository.RolesRepository;
 import com.k48.managing.stock.service.EntrepriseService;
 import com.k48.managing.stock.service.UtilisateurService;
 import com.k48.managing.stock.validators.EntrepriseValidator;
-import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.time.Instant;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional(rollbackOn = Exception.class)
 @Service
-
+@Slf4j
 public class EntrepriseServiceImpl implements EntrepriseService {
-    private static final Logger log = LoggerFactory.getLogger(EntrepriseServiceImpl.class);
+
     private EntrepriseRepository entrepriseRepository;
     private UtilisateurService utilisateurService;
     private RolesRepository rolesRepository;
@@ -68,7 +67,7 @@ public class EntrepriseServiceImpl implements EntrepriseService {
                 .nom(dto.getNom())
                 .prenom(dto.getCodeFiscal())
                 .email(dto.getEmail())
-                .motDePasse(generateRandomPassword())
+                .moteDePasse(generateRandomPassword())
                 .entreprise(dto)
                 .dateDeNaissance(Instant.now())
                 .photo(dto.getPhoto())

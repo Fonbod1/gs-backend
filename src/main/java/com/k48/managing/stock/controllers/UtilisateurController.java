@@ -5,6 +5,8 @@ import com.k48.managing.stock.dto.ChangerMotDePasseUtilisateurDto;
 import com.k48.managing.stock.dto.UtilisateurDto;
 import com.k48.managing.stock.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
 @RestController
 public class UtilisateurController implements UtilisateurApi {
 
-    private UtilisateurService utilisateurService;
+    private final UtilisateurService utilisateurService;
 
     @Autowired
     public UtilisateurController(UtilisateurService utilisateurService) {
@@ -20,31 +22,37 @@ public class UtilisateurController implements UtilisateurApi {
     }
 
     @Override
-    public UtilisateurDto save(UtilisateurDto dto) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public UtilisateurDto save(@RequestBody UtilisateurDto dto) {
         return utilisateurService.save(dto);
     }
 
     @Override
-    public UtilisateurDto changerMotDePasse(ChangerMotDePasseUtilisateurDto dto) {
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public UtilisateurDto changerMotDePasse(@RequestBody ChangerMotDePasseUtilisateurDto dto) {
         return utilisateurService.changerMotDePasse(dto);
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public UtilisateurDto findById(Integer id) {
         return utilisateurService.findById(id);
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public UtilisateurDto findByEmail(String email) {
         return utilisateurService.findByEmail(email);
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UtilisateurDto> findAll() {
         return utilisateurService.findAll();
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(Integer id) {
         utilisateurService.delete(id);
     }

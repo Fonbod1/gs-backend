@@ -1,10 +1,9 @@
 package com.k48.managing.stock.validators;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.k48.managing.stock.dto.UtilisateurDto;
 import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class UtilisateurValidator {
 
@@ -29,7 +28,7 @@ public class UtilisateurValidator {
         if (!StringUtils.hasLength(utilisateurDto.getEmail())) {
             errors.add("Veuillez renseigner l'email d'utilisateur");
         }
-        if (!StringUtils.hasLength(utilisateurDto.getMotDePasse())) {
+        if (!StringUtils.hasLength(utilisateurDto.getMoteDePasse())) {
             errors.add("Veuillez renseigner le mot de passe d'utilisateur");
         }
         if (utilisateurDto.getDateDeNaissance() == null) {

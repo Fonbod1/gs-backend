@@ -1,36 +1,22 @@
 package com.k48.managing.stock.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChangerMotDePasseUtilisateurDto {
 
-    private Integer id;  // Assuming you want an ID field
+    private Integer id;
 
     private String motDePasse;
-    private String confirmMotDePasse;
 
-    // Constructor, Getters, and Setters
+    private String nouveauMotDePasse;
 
-    public Integer getId() {
-        return id;
-    }
+    private String confirmationMotDePasse;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    // Other getters and setters for motDePasse, confirmMotDePasse
-    public String getMotDePasse() {
-        return motDePasse;
-    }
-
-    public void setMotDePasse(String motDePasse) {
-        this.motDePasse = motDePasse;
-    }
-
-    public String getConfirmMotDePasse() {
-        return confirmMotDePasse;
-    }
-
-    public void setConfirmMotDePasse(String confirmMotDePasse) {
-        this.confirmMotDePasse = confirmMotDePasse;
-    }
 }

@@ -1,6 +1,7 @@
 package com.k48.managing.stock.service.strategy;
-
 import com.flickr4java.flickr.FlickrException;
+import java.io.InputStream;
+
 import com.k48.managing.stock.dto.FournisseurDto;
 import com.k48.managing.stock.exceptions.ErrorCodes;
 import com.k48.managing.stock.exceptions.InvalidOperationException;
@@ -10,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import java.io.InputStream;
 
 @Service("fournisseurStrategy")
 @Slf4j

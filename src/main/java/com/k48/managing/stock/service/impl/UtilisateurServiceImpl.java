@@ -1,5 +1,8 @@
 package com.k48.managing.stock.service.impl;
-
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import com.k48.managing.stock.dto.ChangerMotDePasseUtilisateurDto;
 import com.k48.managing.stock.dto.UtilisateurDto;
 import com.k48.managing.stock.exceptions.EntityNotFoundException;
@@ -10,23 +13,15 @@ import com.k48.managing.stock.model.Utilisateur;
 import com.k48.managing.stock.repository.UtilisateurRepository;
 import com.k48.managing.stock.service.UtilisateurService;
 import com.k48.managing.stock.validators.UtilisateurValidator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @Service
+@Slf4j
 public class UtilisateurServiceImpl implements UtilisateurService {
-
-    private static final Logger log = LoggerFactory.getLogger(UtilisateurServiceImpl.class);
 
     private final UtilisateurRepository utilisateurRepository;
     private final PasswordEncoder passwordEncoder;
@@ -43,20 +38,16 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         List<String> errors = UtilisateurValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("Utilisateur is not valid {}", dto);
-            throw new InvalidEntityException("L'utilisateur n'est pas valide",
-                    ErrorCodes.UTILISATEUR_NOT_VALID, errors);
+            throw new InvalidEntityException("L'utilisateur n'est pas valide", ErrorCodes.UTILISATEUR_NOT_VALID, errors);
         }
 
         if (userAlreadyExists(dto.getEmail())) {
-            throw new InvalidEntityException(
-                    "Un autre utilisateur avec le même email existe déjà",
+            throw new InvalidEntityException("Un autre utilisateur avec le meme email existe deja",
                     ErrorCodes.UTILISATEUR_ALREADY_EXISTS,
-                    Collections.singletonList("Un autre utilisateur avec le même email existe déjà dans la BDD")
-            );
+                    Collections.singletonList("Un autre utilisateur avec le meme email existe deja dans la BDD"));
         }
 
-        // ✅ Now matches corrected UtilisateurDto
-        dto.setMotDePasse(passwordEncoder.encode(dto.getMotDePasse()));
+        dto.setMoteDePasse(passwordEncoder.encode(dto.getMoteDePasse()));
 
         return UtilisateurDto.fromEntity(
                 utilisateurRepository.save(UtilisateurDto.toEntity(dto))
@@ -77,9 +68,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return utilisateurRepository.findById(id)
                 .map(UtilisateurDto::fromEntity)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Aucun utilisateur avec l'ID = " + id + " n'a été trouvé dans la BDD",
-                        ErrorCodes.UTILISATEUR_NOT_FOUND
-                ));
+                        "Aucun utilisateur avec l'ID = " + id + " n' ete trouve dans la BDD",
+                        ErrorCodes.UTILISATEUR_NOT_FOUND));
     }
 
     @Override
@@ -103,57 +93,57 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return utilisateurRepository.findUtilisateurByEmail(email)
                 .map(UtilisateurDto::fromEntity)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Aucun utilisateur avec l'email = " + email + " n'a été trouvé dans la BDD",
-                        ErrorCodes.UTILISATEUR_NOT_FOUND
-                ));
+                        "Aucun utilisateur avec l'email = " + email + " n' ete trouve dans la BDD",
+                        ErrorCodes.UTILISATEUR_NOT_FOUND));
     }
 
     @Override
     public UtilisateurDto changerMotDePasse(ChangerMotDePasseUtilisateurDto dto) {
         validate(dto);
-        Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(dto.getId());
-        if (utilisateurOptional.isEmpty()) {
-            log.warn("Aucun utilisateur n'a été trouvé avec l'ID {}", dto.getId());
-            throw new EntityNotFoundException(
-                    "Aucun utilisateur n'a été trouvé avec l'ID " + dto.getId(),
-                    ErrorCodes.UTILISATEUR_NOT_FOUND
-            );
+
+        Utilisateur utilisateur = utilisateurRepository.findById(dto.getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Aucun utilisateur n'a ete trouve avec l'ID " + dto.getId(),
+                        ErrorCodes.UTILISATEUR_NOT_FOUND));
+
+        // Verify current password
+        if (!passwordEncoder.matches(dto.getMotDePasse(), utilisateur.getMoteDePasse())) {
+            throw new InvalidOperationException(
+                    "Mot de passe actuel incorrect",
+                    ErrorCodes.UTILISATEUR_CHANGE_PASSWORD_OBJECT_NOT_VALID);
         }
 
-        Utilisateur utilisateur = utilisateurOptional.get();
-        utilisateur.setMotDePasse(passwordEncoder.encode(dto.getMotDePasse())); // ✅ fixed spelling
+        // Verify new password and confirmation match
+        if (!dto.getNouveauMotDePasse().equals(dto.getConfirmationMotDePasse())) {
+            throw new InvalidOperationException(
+                    "Mots de passe utilisateur non conformes:: Impossible de modifier le mot de passe",
+                    ErrorCodes.UTILISATEUR_CHANGE_PASSWORD_OBJECT_NOT_VALID);
+        }
 
-        return UtilisateurDto.fromEntity(utilisateurRepository.save(utilisateur));
+        // Encode and save new password
+        utilisateur.setMoteDePasse(passwordEncoder.encode(dto.getNouveauMotDePasse()));
+        utilisateurRepository.save(utilisateur);
+
+        return UtilisateurDto.fromEntity(utilisateur);
     }
 
     private void validate(ChangerMotDePasseUtilisateurDto dto) {
         if (dto == null) {
             log.warn("Impossible de modifier le mot de passe avec un objet NULL");
-            throw new InvalidOperationException(
-                    "Aucune information n'a été fournie pour pouvoir changer le mot de passe",
-                    ErrorCodes.UTILISATEUR_CHANGE_PASSWORD_OBJECT_NOT_VALID
-            );
+            throw new InvalidOperationException("Aucune information n'a ete fourni pour pouvoir changer le mot de passe",
+                    ErrorCodes.UTILISATEUR_CHANGE_PASSWORD_OBJECT_NOT_VALID);
         }
         if (dto.getId() == null) {
             log.warn("Impossible de modifier le mot de passe avec un ID NULL");
-            throw new InvalidOperationException(
-                    "ID utilisateur null : Impossible de modifier le mot de passe",
-                    ErrorCodes.UTILISATEUR_CHANGE_PASSWORD_OBJECT_NOT_VALID
-            );
+            throw new InvalidOperationException("ID utilisateur null:: Impossible de modifier le mote de passe",
+                    ErrorCodes.UTILISATEUR_CHANGE_PASSWORD_OBJECT_NOT_VALID);
         }
-        if (!StringUtils.hasLength(dto.getMotDePasse()) || !StringUtils.hasLength(dto.getConfirmMotDePasse())) {
+        if (!StringUtils.hasLength(dto.getMotDePasse()) ||
+                !StringUtils.hasLength(dto.getNouveauMotDePasse()) ||
+                !StringUtils.hasLength(dto.getConfirmationMotDePasse())) {
             log.warn("Impossible de modifier le mot de passe avec un mot de passe NULL");
-            throw new InvalidOperationException(
-                    "Mot de passe utilisateur null : Impossible de modifier le mot de passe",
-                    ErrorCodes.UTILISATEUR_CHANGE_PASSWORD_OBJECT_NOT_VALID
-            );
-        }
-        if (!dto.getMotDePasse().equals(dto.getConfirmMotDePasse())) {
-            log.warn("Impossible de modifier le mot de passe avec deux mots de passe différents");
-            throw new InvalidOperationException(
-                    "Mots de passe utilisateur non conformes : Impossible de modifier le mot de passe",
-                    ErrorCodes.UTILISATEUR_CHANGE_PASSWORD_OBJECT_NOT_VALID
-            );
+            throw new InvalidOperationException("Mot de passe utilisateur null:: Impossible de modifier le mote de passe",
+                    ErrorCodes.UTILISATEUR_CHANGE_PASSWORD_OBJECT_NOT_VALID);
         }
     }
 }

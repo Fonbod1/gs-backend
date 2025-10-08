@@ -1,13 +1,11 @@
 package com.k48.managing.stock.model;
 
-import com.k48.managing.stock.model.AbstractEntity;
-import com.k48.managing.stock.model.Article;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -39,53 +37,4 @@ public class MvtStk extends AbstractEntity {
 
     @Column(name = "identreprise")
     private Integer idEntreprise;
-
-    // Explicit getters and setters
-    public Instant getDateMvt() {
-        return dateMvt;
-    }
-
-    public void setDateMvt(Instant dateMvt) {
-        this.dateMvt = dateMvt;
-    }
-
-    public BigDecimal getQuantite() {
-        return quantite;
-    }
-
-    public void setQuantite(BigDecimal quantite) {
-        this.quantite = quantite;
-    }
-
-    public Article getArticle() {
-        return article;
-    }
-
-    public void setArticle(Article article) {
-        this.article = article;
-    }
-
-    public TypeMvtStk getTypeMvt() {
-        return typeMvt;
-    }
-
-    public void setTypeMvt(TypeMvtStk typeMvt) {
-        this.typeMvt = typeMvt;
-    }
-
-    public SourceMvtStk getSourceMvt() {
-        return sourceMvt;
-    }
-
-    public void setSourceMvt(SourceMvtStk sourceMvt) {
-        this.sourceMvt = sourceMvt;
-    }
-
-    public Integer getIdEntreprise() {
-        return idEntreprise;
-    }
-
-    public void setIdEntreprise(Integer idEntreprise) {
-        this.idEntreprise = idEntreprise;
-    }
 }

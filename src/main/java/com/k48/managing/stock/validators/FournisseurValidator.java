@@ -1,10 +1,9 @@
 package com.k48.managing.stock.validators;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.k48.managing.stock.dto.FournisseurDto;
 import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FournisseurValidator {
 

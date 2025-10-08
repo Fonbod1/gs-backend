@@ -1,3 +1,5 @@
+
+/*
 package com.k48.managing.stock.config;
 
 import org.springframework.context.annotation.Bean;
@@ -14,3 +16,4 @@ public class PasswordEncoderConfig {
         return new BCryptPasswordEncoder();
     }
 }
+*/

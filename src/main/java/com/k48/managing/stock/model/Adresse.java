@@ -1,9 +1,18 @@
 package com.k48.managing.stock.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 @Embeddable
 public class Adresse implements Serializable {
 
@@ -22,17 +31,4 @@ public class Adresse implements Serializable {
     @Column(name = "pays")
     private String pays;
 
-    // ===== Explicit Getters =====
-    public String getAdresse1() { return adresse1; }
-    public String getAdresse2() { return adresse2; }
-    public String getVille() { return ville; }
-    public String getCodePostale() { return codePostale; }
-    public String getPays() { return pays; }
-
-    // ===== Explicit Setters =====
-    public void setAdresse1(String adresse1) { this.adresse1 = adresse1; }
-    public void setAdresse2(String adresse2) { this.adresse2 = adresse2; }
-    public void setVille(String ville) { this.ville = ville; }
-    public void setCodePostale(String codePostale) { this.codePostale = codePostale; }
-    public void setPays(String pays) { this.pays = pays; }
 }

@@ -1,5 +1,4 @@
 package com.k48.managing.stock.service;
-
 import com.k48.managing.stock.dto.EntrepriseDto;
 
 import java.util.List;

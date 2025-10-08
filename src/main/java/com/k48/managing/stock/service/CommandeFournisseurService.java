@@ -1,5 +1,4 @@
 package com.k48.managing.stock.service;
-
 import com.k48.managing.stock.dto.CommandeFournisseurDto;
 import com.k48.managing.stock.dto.LigneCommandeFournisseurDto;
 import com.k48.managing.stock.model.EtatCommande;
@@ -12,6 +11,8 @@ public interface CommandeFournisseurService {
     CommandeFournisseurDto save(CommandeFournisseurDto dto);
 
     CommandeFournisseurDto updateEtatCommande(Integer idCommande, EtatCommande etatCommande);
+
+    //CommandeFournisseurDto updateEtatCommande(Integer idCommande, EtatCommande etatCommande);
 
     CommandeFournisseurDto updateQuantiteCommande(Integer idCommande, Integer idLigneCommande, BigDecimal quantite);
 

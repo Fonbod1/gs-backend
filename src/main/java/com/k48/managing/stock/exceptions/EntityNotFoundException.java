@@ -1,33 +1,28 @@
 package com.k48.managing.stock.exceptions;
 
+import lombok.Getter;
+
 public class EntityNotFoundException extends RuntimeException {
 
+    @Getter
     private ErrorCodes errorCode;
 
-    // Constructor with message only
     public EntityNotFoundException(String message) {
         super(message);
     }
 
-    // Constructor with message and cause
     public EntityNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    // Constructor with message and errorCode
-    public EntityNotFoundException(String message, ErrorCodes errorCode) {
-        super(message);
-        this.errorCode = errorCode;  // Set the error code
-    }
-
-    // Constructor with message, cause, and errorCode
     public EntityNotFoundException(String message, Throwable cause, ErrorCodes errorCode) {
         super(message, cause);
-        this.errorCode = errorCode;  // Set the error code
+        this.errorCode = errorCode;
     }
 
-    // Getter for errorCode
-    public ErrorCodes getErrorCode() {
-        return errorCode;
+    public EntityNotFoundException(String message, ErrorCodes errorCode) {
+        super(message);
+        this.errorCode = errorCode;
     }
+
 }

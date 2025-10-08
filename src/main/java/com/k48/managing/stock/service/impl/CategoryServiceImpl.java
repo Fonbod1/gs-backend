@@ -1,4 +1,6 @@
 package com.k48.managing.stock.service.impl;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.k48.managing.stock.dto.CategoryDto;
 import com.k48.managing.stock.exceptions.EntityNotFoundException;
@@ -10,19 +12,14 @@ import com.k48.managing.stock.repository.ArticleRepository;
 import com.k48.managing.stock.repository.CategoryRepository;
 import com.k48.managing.stock.service.CategoryService;
 import com.k48.managing.stock.validators.CategoryValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
-
-    private static final Logger log = LoggerFactory.getLogger(CategoryServiceImpl.class);
 
     private CategoryRepository categoryRepository;
     private ArticleRepository articleRepository;

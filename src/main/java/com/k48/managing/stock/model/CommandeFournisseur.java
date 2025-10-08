@@ -1,9 +1,22 @@
 package com.k48.managing.stock.model;
 
-import jakarta.persistence.*;
+import com.k48.managing.stock.model.AbstractEntity;
+import com.k48.managing.stock.model.EtatCommande;
+import com.k48.managing.stock.model.Fournisseur;
+import com.k48.managing.stock.model.LigneCommandeFournisseur;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "commandefournisseur")
 public class CommandeFournisseur extends AbstractEntity {
@@ -28,46 +41,5 @@ public class CommandeFournisseur extends AbstractEntity {
     @OneToMany(mappedBy = "commandeFournisseur")
     private List<LigneCommandeFournisseur> ligneCommandeFournisseurs;
 
-    // ===== Getters & Setters =====
-    public String getCode() {
-        return code;
-    }
-    public void setCode(String code) {
-        this.code = code;
-    }
 
-    public Instant getDateCommande() {
-        return dateCommande;
-    }
-    public void setDateCommande(Instant dateCommande) {
-        this.dateCommande = dateCommande;
-    }
-
-    public EtatCommande getEtatCommande() {
-        return etatCommande;
-    }
-    public void setEtatCommande(EtatCommande etatCommande) {
-        this.etatCommande = etatCommande;
-    }
-
-    public Integer getIdEntreprise() {
-        return idEntreprise;
-    }
-    public void setIdEntreprise(Integer idEntreprise) {
-        this.idEntreprise = idEntreprise;
-    }
-
-    public Fournisseur getFournisseur() {
-        return fournisseur;
-    }
-    public void setFournisseur(Fournisseur fournisseur) {
-        this.fournisseur = fournisseur;
-    }
-
-    public List<LigneCommandeFournisseur> getLigneCommandeFournisseurs() {
-        return ligneCommandeFournisseurs;
-    }
-    public void setLigneCommandeFournisseurs(List<LigneCommandeFournisseur> ligneCommandeFournisseurs) {
-        this.ligneCommandeFournisseurs = ligneCommandeFournisseurs;
-    }
 }

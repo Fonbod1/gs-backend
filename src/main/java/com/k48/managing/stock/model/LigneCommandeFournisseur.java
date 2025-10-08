@@ -1,9 +1,17 @@
 package com.k48.managing.stock.model;
 
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "lignecommandefournisseur")
 public class LigneCommandeFournisseur extends AbstractEntity {
@@ -25,48 +33,4 @@ public class LigneCommandeFournisseur extends AbstractEntity {
     @Column(name = "identreprise")
     private Integer idEntreprise;
 
-    // Getter and Setter for article
-    public Article getArticle() {
-        return article;
-    }
-
-    public void setArticle(Article article) {
-        this.article = article;
-    }
-
-    // Getter and Setter for commandeFournisseur
-    public CommandeFournisseur getCommandeFournisseur() {
-        return commandeFournisseur;
-    }
-
-    public void setCommandeFournisseur(CommandeFournisseur commandeFournisseur) {
-        this.commandeFournisseur = commandeFournisseur;
-    }
-
-    // Getter and Setter for quantite
-    public BigDecimal getQuantite() {
-        return quantite;
-    }
-
-    public void setQuantite(BigDecimal quantite) {
-        this.quantite = quantite;
-    }
-
-    // Getter and Setter for prixUnitaire
-    public BigDecimal getPrixUnitaire() {
-        return prixUnitaire;
-    }
-
-    public void setPrixUnitaire(BigDecimal prixUnitaire) {
-        this.prixUnitaire = prixUnitaire;
-    }
-
-    // Getter and Setter for idEntreprise
-    public Integer getIdEntreprise() {
-        return idEntreprise;
-    }
-
-    public void setIdEntreprise(Integer idEntreprise) {
-        this.idEntreprise = idEntreprise;
-    }
 }

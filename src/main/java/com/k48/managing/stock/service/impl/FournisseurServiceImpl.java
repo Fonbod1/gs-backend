@@ -1,5 +1,7 @@
 package com.k48.managing.stock.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.k48.managing.stock.dto.FournisseurDto;
 import com.k48.managing.stock.exceptions.EntityNotFoundException;
@@ -14,15 +16,12 @@ import com.k48.managing.stock.validators.FournisseurValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 @Slf4j
 public class FournisseurServiceImpl implements FournisseurService {
-    private static final Logger log = LoggerFactory.getLogger(FournisseurServiceImpl.class);
+
     private FournisseurRepository fournisseurRepository;
     private CommandeFournisseurRepository commandeFournisseurRepository;
 

@@ -1,5 +1,4 @@
 package com.k48.managing.stock.validators;
-
 import com.k48.managing.stock.dto.LigneCommandeClientDto;
 
 import java.util.ArrayList;
