@@ -40,6 +40,12 @@ public class ApplicationRequestFilter extends OncePerRequestFilter {
             userEmail = jwtUtil.extractUsername(jwt);
             idEntreprise = jwtUtil.extractIdEntreprise(jwt);
         }
+        System.out.println("AUTH HEADER: " + authHeader);
+        System.out.println("JWT: " + jwt);
+        System.out.println("Extracted username: " + userEmail);
+        System.out.println("Extracted entreprise ID: " + idEntreprise);
+
+
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);

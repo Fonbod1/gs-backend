@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -28,15 +27,22 @@ public class ApplicationUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with email: " + email);
         }
 
-        // Safely build authorities
+        // Safely build authorities, avoid double ROLE_ prefix
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         if (utilisateur.getRoles() != null) {
             utilisateur.getRoles().forEach(role -> {
                 if (role.getRoleName() != null) {
-                    authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+                    String roleName = role.getRoleName();
+                    if (!roleName.startsWith("ROLE_")) {
+                        roleName = "ROLE_" + roleName;
+                    }
+                    authorities.add(new SimpleGrantedAuthority(roleName));
                 }
             });
         }
+
+        // Debug logging
+        authorities.forEach(a -> System.out.println("Authority: " + a.getAuthority()));
 
         // Safely get entreprise ID
         Integer idEntreprise = utilisateur.getEntreprise() != null ? utilisateur.getEntreprise().getId() : null;
@@ -45,13 +51,10 @@ public class ApplicationUserDetailsService implements UserDetailsService {
                 utilisateur.getEmail(),
                 utilisateur.getMoteDePasse(),
                 idEntreprise,
-               // null
                 authorities
         );
     }
 }
-
-
 
 
 /*
