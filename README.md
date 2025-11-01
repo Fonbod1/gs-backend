@@ -37,7 +37,7 @@ with JSON body:
 
 {
   "login": "admin@gestiondestock.com",
-  "password": "admin123"
+  "password": ""
 }
 
 
@@ -79,18 +79,16 @@ Below are the endpoints, grouped with explanations and linked to screenshots fro
 
 POST /gestiondestock/v1/auth/authenticate → Login and obtain JWT token
 
-📷 Screenshot:
-resources/Gestion_de Stock_photo/
+📷 Screenshot:resources/Gestion_de Stock_photo/
 
 Each endpoint starts with:
-
-  http://localhost:8081
+ http://localhost:8081
 👤Utilisateurs
 
  POST /gestiondestock/v1/utilisateurs/create
 
  Create user
- ![Create User](resources/Gestion_de Stock_photo/utilisateurs/create.png)
+ ![Create User]([resources/Gestion_de Stock_photo/utilisateurs/create.png](https://github.com/Fonbod1/gs-backend/blob/main/src/main/resources/Gestion_de%20Stock_photo/Utilisateur/Create_Utilisateur.png?raw=true))
 
  GET /gestiondestock/v1/utilisateurs/{id}
 
