@@ -88,7 +88,8 @@ Each endpoint starts with:
  POST /gestiondestock/v1/utilisateurs/create
 
  Create user
- ![Create User]([resources/Gestion_de Stock_photo/utilisateurs/create.png](https://github.com/Fonbod1/gs-backend/blob/main/src/main/resources/Gestion_de%20Stock_photo/Utilisateur/Create_Utilisateur.png?raw=true))
+![Create User](https://raw.githubusercontent.com/Fonbod1/gs-backend/main/src/main/resources/Gestion_de%20Stock_photo/utilisateurs/create.png)
+
 
  GET /gestiondestock/v1/utilisateurs/{id}
 
